@@ -43,5 +43,17 @@ function convertTreeToBreadthArray(tree){
   return null;
 }
 
+function convertTreeToDeepthArray(tree, result){
+  if (tree){
+    result.push(tree.value);
+    convertTreeToDeepthArray(tree.left, result);
+    convertTreeToDeepthArray(tree.right, result);
+  }
+}
+
 var _treearray = convertTreeToBreadthArray(createTestTree());
 console.log(_treearray);
+
+var _unusearray = [];
+convertTreeToDeepthArray(createTestTree(), _unusearray);
+console.log(_unusearray);
