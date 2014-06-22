@@ -15,7 +15,7 @@ function bubbleSort(input){
   return input;
 }
 
-/* ---Insertion Sort---*/
+/* ---Insertion Sort, efficent for small array---*/
 function insertSort(input){
   input = input.slice(0);
   for (var i=1;i<input.length;i++){
@@ -85,9 +85,36 @@ function mergeSortBottomUp(input){
   return input;
 }
 
-/* ---Quick Sort---*/
+/* ---Quick Sort, Simple version: pivot not the median value, don't consider equal pivot condition---*/
+function _qsort(a, left, right){
+  if (left < right){
+    var pivotIndex = _partition(a, left, right);
+    _qsort(a, left, pivotIndex - 1);
+    _qsort(a, pivotIndex + 1, right);
+  }
+}
+
+function _partition(a, left, right){
+  var pivotIndex = right; // not optimize for pivot selection
+  var k = left;
+  var tmp;
+  for (var i=left;i<=right-1;i++){
+    if (a[i]<=a[pivotIndex]){
+      tmp = a[i];
+      a[i] = a[k];
+      a[k] = tmp;
+      k++;
+    }
+  }
+  tmp = a[k];
+  a[k] = a[pivotIndex];
+  a[pivotIndex] = tmp;
+  return k;
+}
+
 function quickSort(input){
   input = input.slice(0);
+  _qsort(input, 0, input.length-1);
   return input;
 }
 
