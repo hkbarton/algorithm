@@ -118,9 +118,37 @@ function quickSort(input){
   return input;
 }
 
-/* ---Bucket Sort---*/
-function bucketSort(input){
+/* ---Radix Sort---*/
+function radixSort(input){
   input = input.slice(0);
+  // Base = 10;
+  // find largest number in array to determine the k (max digital of number in array)
+  var k = 0;
+  for (var i=0;i<input.length;i++){
+    if (input[i]>k) k = input[i]; 
+  }
+  // sort
+  var store = new Array(input.length);
+  var e = 1;
+  var workArray = input;
+  var tmpArray = store;
+  while(Math.floor(k / e) > 0){
+    var buckets = [0,0,0,0,0,0,0,0,0,0];
+    for (i=0;i<workArray.length;i++){
+      buckets[Math.floor(workArray[i]/e) % 10]++;
+    }
+    for (i=1;i<10;i++){
+      buckets[i] += buckets[i-1];
+    }
+    for (i=workArray.length-1;i>=0;i--){
+      tmpArray[--buckets[Math.floor(workArray[i]/e)%10]] = workArray[i];
+    }
+    // switch work array
+    if(workArray===input) workArray = store; else if(workArray===store) workArray = input;
+    if(tmpArray===input) tmpArray = store; else if(tmpArray===store) tmpArray = input;
+    // next digital
+    e *= 10;
+  }
   return input;
 }
 
@@ -152,8 +180,8 @@ for(var i=0;i<1000000;i++) quickSort(_data);
 console.log("cost:" + (new Date().getTime() - begin).toString());
 
 process.stdout.write('\n');
-console.log("bucket sort");
+console.log("Radix sort");
 var begin = new Date().getTime();
-console.log(bucketSort(_data).join());
-for(var i=0;i<1000000;i++) bucketSort(_data);
+console.log(radixSort(_data).join());
+for(var i=0;i<1000000;i++) radixSort(_data);
 console.log("cost:" + (new Date().getTime() - begin).toString());
