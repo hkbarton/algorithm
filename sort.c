@@ -83,7 +83,7 @@ int _partition(int *a, int left, int right){
   int pivotIndex = right;
   int k = left;
   int tmp,i;
-  for(i=left;i<right-1;i++){
+  for(i=left;i<=right-1;i++){
     if (a[i]<=a[pivotIndex]){
       tmp = a[i];
       a[i] = a[k];
@@ -109,6 +109,44 @@ void quickSort(int *a, int n){
   _qsort(a, 0, n-1);
 }
 
+/* ---Radix Sort---*/
+void radixSort(int *a, int n){
+  int k = 0;
+  int i;
+  for(i=0;i<n;i++){
+    if (a[i]>k) k = a[i];
+  }
+  int *store = malloc(sizeof(int)*n);
+  int e = 1;
+  int *workArray = a;
+  int *tmpArray = store;
+  int zc = 0;
+  while(k/e>0){
+    int buckets[10] = {0};
+    for(i=0;i<n;i++){
+      buckets[(workArray[i]/e)%10]++;
+    }
+    for(i=1;i<10;i++){
+      buckets[i] += buckets[i-1];
+    }
+    for(i=n-1;i>=0;i--){
+      tmpArray[--buckets[(workArray[i]/e)%10]] = workArray[i];
+    }
+    if(workArray==a) workArray = store; else if(workArray==store) workArray = a;
+    if(tmpArray==a) tmpArray = store; else if(tmpArray==store) tmpArray = a;
+    e*=10;
+    zc++;
+  }
+  // copy back
+  if(zc%2>0){
+    for(i=0;i<n;i++){
+      a[i] = store[i];
+    }
+  }
+  free(store);
+}
+
+/* --- Begin Test---*/
 void test(void(*fun)(int*, int), int *input, int n, char *text){
   printf("%s\n", text);
   // output result
@@ -121,7 +159,7 @@ void test(void(*fun)(int*, int), int *input, int n, char *text){
   int *ta = malloc(sizeof(int)*n);
   clock_t start = clock();
   int i=0;
-  for(i=0;i<1000000;i++){
+  for(i=0;i<100000;i++){
     duplicateArray(input, ta, n);
     fun(ta, n);
   }
@@ -132,11 +170,20 @@ void test(void(*fun)(int*, int), int *input, int n, char *text){
 }
 
 int main(){
-  int n=16;
-  int testData[16] = {99,5,2,1,31,15,25,12,35,33,56,78,21,34,30,55};
+  int n=200;
+  int testData[200] = {0};
+  int i = 0;
+  srand(time(NULL));
+  for(i=0;i<n;i++){
+    testData[i] = rand()%200 + 1;
+  }
+  printf("Ori Array:\n");
+  printArray(&testData[0], n);
+  printf("\n");
   test(&bubbleSort, &testData[0], n, "Bubble Sort");
   test(&insertSort, &testData[0], n, "Insertion Sort");
   test(&mergeSort, &testData[0], n, "Merge Sort");
   test(&quickSort, &testData[0], n, "Quick Sort");
+  test(&radixSort, &testData[0], n, "Radix Sort");
   return 0;
 }
