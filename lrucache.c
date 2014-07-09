@@ -56,12 +56,12 @@ CacheItem* _access(char *key, char* value, int move){
   while(tc!=NULL && strcmp(tc->key, key)!=0) tc = tc->next;
   if (tc!=NULL){
     if (value!=NULL) _setItem(tc, key, value);
-    if (move > 0){
+    if (move > 0 && tc!=cache){
       if (tc->prev!=NULL) tc->prev->next = tc->next;
       if (tc->next!=NULL) tc->next->prev = tc->prev;
       tc->prev = NULL;
-      cache->prev = tc;
       tc->next = cache;
+      cache->prev = tc;
       cache = tc;
     }
   }
@@ -108,13 +108,12 @@ void dump(){
     int i = 0;
     while(tc!=NULL){
       output[i] = tc;
-      printf("%s %s\r", output[i]->key, output[i]->value);
       tc = tc->next;
       i++;
     }
     qsort(output, cachelen, sizeof(CacheItem*), _compareAplha);
     for(i=0;i<cachelen;i++){
-      printf("%s %s\r", output[i]->key, output[i]->value);
+      printf("%s %s\n", output[i]->key, output[i]->value);
     }
     free(output);
   }
@@ -129,7 +128,7 @@ int main(){
     if (cmdcnt==0){
       return 1;
     }
-    while(getline(&linebuf, &len, stdin)!=-1 && readcnt < cmdcnt){
+    while(readcnt < cmdcnt && getline(&linebuf, &len, stdin)!=-1){
       // read comand
       char** cmds = malloc(sizeof(char*)*3);
       char* cmdtok = strtok(strtok(linebuf,"\n"), " ");
@@ -146,9 +145,11 @@ int main(){
       }else if(strcmp(cmds[0],"SET")==0){
         set(cmds[1], cmds[2]);
       }else if(strcmp(cmds[0],"GET")==0){
-        printf("%s\n", get(cmds[1]));
+        char* v = get(cmds[1]);
+        printf("%s\n", v!=NULL ? v : "NULL");
       }else if(strcmp(cmds[0],"PEEK")==0){
-        printf("%s\n", peek(cmds[1]));
+        char* v = peek(cmds[1]);
+        printf("%s\n", v!=NULL ? v : "NULL");
       }else if(strcmp(cmds[0],"DUMP")==0){
         dump();
       }
