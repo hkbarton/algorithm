@@ -29,6 +29,8 @@ void _setItem(CacheItem* item, char* key, char* value){
 
 void _newitem(char* key, char* value, CacheItem* prev, CacheItem* next){
   CacheItem* item = malloc(sizeof(CacheItem));
+  item->key = NULL;
+  item->value = NULL;
   _setItem(item, key, value);
   item->prev = prev;
   if(prev!=NULL) prev->next = item;
@@ -98,7 +100,9 @@ char* peek(char* key){
 }
 
 int _compareAplha(const void* a, const void* b){
-  return strcmp(((CacheItem*)a)->key, ((CacheItem*)b)->key);
+  CacheItem* itema = *((CacheItem**)a);
+  CacheItem* itemb = *((CacheItem**)b);
+  return strcmp(itema->key, itemb->key);
 }
 
 void dump(){
