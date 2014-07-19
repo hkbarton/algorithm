@@ -18,7 +18,8 @@
 function processInput(input){
   if (typeof input == "string"){
     //var lines = input.replace(/^\s+|\s+$/g,"").split("\n"); // trim
-    var lines = input.trim();
+    var lines = input.trim().split('\n');
+    // TODO
   }else{
     throw "Data input should be string.";
   }
