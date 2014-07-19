@@ -1,9 +1,5 @@
 // Longest Common Subsequence
 // recusion funciton:
-// LCS(Xi, Yj) = 0  ; if i==0 or j==0
-// LCS(Xi, Yj) = LCS(Xi-1, Yj-1) + 1  ; if Xi==Yj
-// LCS(Xi, Yj) = MAX(LCS(Xi,Yj-1), LCS(Xi-1,Yj))  ; if Xi!=Yj
-
 (function main(){
   var sInput = "";
   process.stdin.resume();
@@ -33,6 +29,9 @@ function processInput(input){
   }
 }
 
+// LCS(Xi, Yj) = 0  ; if i==0 or j==0
+// LCS(Xi, Yj) = LCS(Xi-1, Yj-1) + 1  ; if Xi==Yj
+// LCS(Xi, Yj) = MAX(LCS(Xi,Yj-1), LCS(Xi-1,Yj))  ; if Xi!=Yj
 function LCS(x, y){
   var lenx = x.length,
       leny = y.length;
