@@ -40,6 +40,28 @@ exports.buildTree = function(treeData){
   return null;
 };
 
+exports.treeToArray = function(tree){
+  if (tree instanceof Object){
+    var result = [];
+    var queue = [tree];
+    var item;
+    while(queue.length > 0){
+      item = queue.shift();
+      if (item===null){
+        result.push('#');
+      }else{
+        result.push(String(item.key));
+        if (item.left || item.right){ // not leaf node
+          queue.push(item.left);
+          queue.push(item.right);
+        }
+      }
+    }
+    return result;
+  }
+  return null;
+};
+
 exports.printTree = function(tree){
   // print tree use breadth-first tranversal
   if (tree){
