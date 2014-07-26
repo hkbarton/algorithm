@@ -1,3 +1,5 @@
+var assert = require('assert');
+
 (function main(){
   var sInput = "";
   process.stdin.resume();

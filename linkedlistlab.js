@@ -5,6 +5,7 @@ exports.buildLinkedListFromArray = function(data){
   var result = {};
   var handle = result;
   var i = 0;
+  var length = 0;
   while(i<data.length){
     handle.key = data[i];
     if (data.indexOf(data[i]) < i){
@@ -13,10 +14,24 @@ exports.buildLinkedListFromArray = function(data){
       handle.next = tmp;
       break;
     }else{
+      length++;
       handle.next = i==data.length-1 ? null : {};
       handle = handle.next;
     }
     i++;
   }
+  result.length = length;
   return result;
+};
+
+exports.printLinkedList = function(ll){
+  if (ll){
+    var item = ll;
+    while(item!==null){
+      process.stdout.write(String(item.key));
+      process.stdout.write('->');
+      item = item.next;
+    }
+    process.stdout.write('NULL\n');
+  }
 };
