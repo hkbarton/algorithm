@@ -24,10 +24,16 @@ exports.buildTree = function(treeData){
     };
     while(treeData.length > 0 && handle.length > 0){
       var item = handle.shift();
-      var leftKey = parseTreeKey(treeData.shift());
-      var rightKey = parseTreeKey(treeData.shift());
-      item.left = leftKey ? {key:leftKey} : null;
-      item.right = rightKey ? {key:rightKey} : null;
+      var leftKey = null;
+      if (treeData.length > 0){
+        leftKey = parseTreeKey(treeData.shift());
+      }
+      var rightKey = null;
+      if (treeData.length > 0){
+        rightKey = parseTreeKey(treeData.shift());
+      }
+      item.left = typeof leftKey == 'number' ? {key:leftKey} : null;
+      item.right = typeof rightKey == 'number' ? {key:rightKey} : null;
       if (item.left){
         handle.push(item.left); 
       }
