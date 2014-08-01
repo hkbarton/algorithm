@@ -1,9 +1,7 @@
 /*
-Box Towers
+Use multiple boxes to build a tower.
 
-In the not so distant future, Box has commissioned you to design the new Box Worldwide Headquarters - The Box Towers. The design principal is a series of boxes (what else?),  one on top of each other. Each department in Box will be located in a different box.
-
-Now each department has decided they have different needs in terms of the height, width and length (depth) of their box. For structural integrity reasons, you must also not place a box that has a larger footprint on top of a box with a smaller footprint i.e a box can be kept on the top of another box only if the Length of the upper box is not more than the Length of box below and the same for Width. You may rotate the boxes as necessary to make any of the face as base i.e 3D rotation is allowed.
+The design principal is a series of boxes, one on top of each other. Each box has different height, width and length. For structural integrity reasons, you must also not place a box that has a larger footprint on top of a box with a smaller footprint i.e a box can be kept on the top of another box only if the Length of the upper box is not more than the Length of box below and the same for Width. You may rotate the boxes as necessary to make any of the face as base i.e 3D rotation is allowed.
 
 Given the set of boxes, come up with the tallest building possible while satisfying the above constraints. It may not be possible to use all the boxes.
 
@@ -19,14 +17,10 @@ Output a single line which is the height of the tallest possible building that c
 
 Sample Input
 
- 
-
 3
 5 2 4
 1 4 2
 4 4 2
-
- 
 
 Sample Output
 
