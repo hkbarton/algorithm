@@ -1,5 +1,5 @@
-const { buildTree, printTree } = require("../treelab")
-const { readInput } = require("../stdio")
+const { buildTree, printTree } = require("../base-ds/tree")
+const { readInput } = require("../utils/stdio")
 
 function printLeftEdge(tree) {
   let currentLayer = -1
