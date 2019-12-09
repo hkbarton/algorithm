@@ -16,6 +16,9 @@ function parseTreeValue(value) {
 module.exports = {
   buildTree: treeData => {
     if (treeData instanceof Array && treeData.length > 0) {
+      if (!treeData[0] || treeData[0] === "#") {
+        throw new Error("root node must not empty")
+      }
       const result = {
         key: parseTreeValue(treeData.shift())
       }
