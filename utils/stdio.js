@@ -1,4 +1,4 @@
-exports.readInput = async () => {
+exports.readInput = async (terminator) => {
   return new Promise((resolve) => {
     let input = ""
     process.stdin.setEncoding("utf8")
@@ -6,7 +6,7 @@ exports.readInput = async () => {
       let chunk
       while ((chunk = process.stdin.read()) !== null) {
         input += chunk.trim()
-        if (chunk.endsWith("\n")) {
+        if (chunk.endsWith(terminator)) {
           process.stdin.destroy()
           break
         }

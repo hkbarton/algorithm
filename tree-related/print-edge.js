@@ -1,4 +1,4 @@
-const { buildTree, printTree } = require("../base-ds/tree")
+const { buildTree, printTree, getLevel } = require("../base-ds/tree")
 const { readInput } = require("../utils/stdio")
 
 function printLeftEdge(tree) {
@@ -43,9 +43,12 @@ function printRightEdge(tree) {
 }
 
 async function main() {
-  const input = await readInput()
+  const input = await readInput("\n")
   const treeData = input.split(",")
   const tree = buildTree(treeData)
+
+  console.log("\nTree")
+  printTree(tree)
 
   console.log("\nLeft Edge")
   printLeftEdge(tree)

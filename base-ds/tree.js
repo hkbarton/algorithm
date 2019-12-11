@@ -13,7 +13,7 @@ function parseTreeValue(value) {
   return !value || value === "#" ? null : value
 }
 
-module.exports = {
+module.exports = exports = {
   buildTree: treeData => {
     if (treeData instanceof Array && treeData.length > 0) {
       if (!treeData[0] || treeData[0] === "#") {
@@ -43,19 +43,18 @@ module.exports = {
   },
 
   treeToArray: tree => {
-    if (tree instanceof Object) {
-      var result = [];
-      var queue = [tree];
-      var item;
-      while (queue.length > 0) {
-        item = queue.shift();
-        if (item === null) {
+    if (tree) {
+      const result = [];
+      const frontier = [tree]
+      while (frontier.length > 0) {
+        const node = frontier.shift();
+        if (!node) {
           result.push('#');
         } else {
-          result.push(String(item.key));
-          if (item.left || item.right) { // not leaf node
-            queue.push(item.left);
-            queue.push(item.right);
+          result.push(node.key);
+          if (node.left || node.right) {
+            frontier.push(node.left)
+            frontier.push(node.right)
           }
         }
       }
@@ -64,25 +63,57 @@ module.exports = {
     return null;
   },
 
-  printTree: tree => {
-    // print tree use breadth-first tranversal
+  getLevel: tree => {
     if (tree) {
-      var temp = [];
-      temp.push({ data: tree, level: 0 });
-      var node = null;
-      var level = 0;
-      while (temp.length > 0) {
-        node = temp.shift();
-        if (node.level != level) {
+      let level = 1
+      const frontier = [tree]
+      while (frontier.length > 0) {
+        const node = frontier.shift()
+        if (node.left || node.right) {
+          level++
+          if (node.left) frontier.push(node.left)
+          if (node.right) frontier.push(node.right)
+        }
+      }
+      return level
+    }
+    return 0
+  },
+
+  printTree: tree => {
+    if (tree) {
+      const totalLevel = exports.getLevel(tree)
+      const totalLeafCount = Math.pow(2, totalLevel - 1)
+      const totalWidthOfLeaf = 2 * totalLeafCount - 1
+
+      let currentLevel = -1
+      const frontier = [[tree, 0]]
+      while (frontier.length > 0) {
+        const [node, level] = frontier.shift();
+        if (level > totalLevel - 1) {
+          break
+        }
+
+        const levelIndent = Math.floor(totalWidthOfLeaf / Math.pow(2, level + 1))
+        const levelLeafCount = Math.pow(2, level)
+        let levelSpaceBetweenNode
+        if (levelLeafCount > 1) {
+          levelSpaceBetweenNode = Math.floor(((totalWidthOfLeaf - 2 * levelIndent) - levelLeafCount) / (levelLeafCount - 1))
+        } else {
+          levelSpaceBetweenNode = 0
+        }
+
+        if (level !== currentLevel) {
           process.stdout.write("\n");
-          level = node.level;
+          process.stdout.write(" ".repeat(levelIndent))
         }
-        process.stdout.write(node.data.key + "  ");
-        if (node.data.left) {
-          temp.push({ data: node.data.left, level: (node.level + 1) });
-        }
-        if (node.data.right) {
-          temp.push({ data: node.data.right, level: (node.level + 1) });
+        currentLevel = level
+
+        process.stdout.write(`${node ? node.key : " "}${" ".repeat(levelSpaceBetweenNode)}`);
+
+        if (level < totalLevel - 1) {
+          frontier.push([node ? node.left : null, level + 1])
+          frontier.push([node ? node.right : null, level + 1])
         }
       }
       process.stdout.write("\n");
